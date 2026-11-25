@@ -1,0 +1,7 @@
+*
+!app/__init__.py
+!app/cvss.py
+!app/main.py
+!app/policy.py
+!app/store.py
+!app/requirements.txt

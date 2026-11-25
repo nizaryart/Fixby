@@ -1,0 +1,25 @@
+image:
+  repository: vulntrack
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+existingSecret: vulntrack-api
+existingSecretKey: token
+
+service:
+  port: 80
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: ""
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 96Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi

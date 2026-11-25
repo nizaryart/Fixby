@@ -1,0 +1,12 @@
+.venv/
+.tools/
+__pycache__/
+.pytest_cache/
+*.pyc
+image.tar
+sbom.cdx.json
+reports/
+infra/terraform/.terraform/
+infra/terraform/*.tfstate*
+infra/terraform/terraform.tfvars
+.env

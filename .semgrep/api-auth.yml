@@ -1,0 +1,34 @@
+rules:
+  - id: api-route-outside-protected-router
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Route '$PATH' is registered directly on the app, so it skips the token check of the /api router.
+      Register it on the `api` router instead.
+    metadata:
+      category: security
+      cwe: "CWE-862: Missing Authorization"
+    patterns:
+      - pattern-either:
+          - pattern: |
+              @app.$METHOD("$PATH", ...)
+              def $FUNC(...): ...
+          - pattern: app.add_api_route("$PATH", ...)
+      - metavariable-regex:
+          metavariable: $PATH
+          regex: ^/api(/|$)
+
+  - id: api-router-without-token-check
+    languages: [python]
+    severity: ERROR
+    message: >-
+      A router mounted under /api must enforce `Depends(require_token)` for every route it serves.
+    metadata:
+      category: security
+      cwe: "CWE-862: Missing Authorization"
+    patterns:
+      - pattern: APIRouter(..., prefix="$PREFIX", ...)
+      - metavariable-regex:
+          metavariable: $PREFIX
+          regex: ^/api(/|$)
+      - pattern-not: APIRouter(..., dependencies=[..., Depends(require_token), ...], ...)

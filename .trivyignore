@@ -1,0 +1,5 @@
+# Each entry is a time-boxed risk acceptance: it stops applying on its expiry date and the gate fails again.
+
+# libzstd1 in the distroless Debian 13 base. Debian fixed it in 1.5.7+dfsg-1+deb13u1 on 2026-11-24 and the
+# distroless rebuild was not out yet. VulnTrack never decompresses zstd data. Remove once Dependabot bumps the digest.
+CVE-2026-124851 exp:2026-12-09

@@ -1,0 +1,35 @@
+rules:
+  - id: sql-built-from-runtime-string
+    languages: [python]
+    severity: ERROR
+    message: >-
+      The SQL passed to $METHOD() is built at runtime, so values become part of the query.
+      Keep the query constant and pass values as ? or :name parameters.
+    metadata:
+      category: security
+      cwe: "CWE-89: SQL Injection"
+    patterns:
+      - pattern-either:
+          - pattern: $DB.$METHOD(f"...", ...)
+          - pattern: $DB.$METHOD("..." % $ARGS, ...)
+          - pattern: $DB.$METHOD("...".format(...), ...)
+          - pattern: $DB.$METHOD("..." + $X, ...)
+          - pattern: $DB.$METHOD($X + "...", ...)
+          - patterns:
+              - pattern-either:
+                  - pattern-inside: |
+                      $Q = f"..."
+                      ...
+                  - pattern-inside: |
+                      $Q = "..." % $ARGS
+                      ...
+                  - pattern-inside: |
+                      $Q = "...".format(...)
+                      ...
+                  - pattern-inside: |
+                      $Q = "..." + $X
+                      ...
+              - pattern: $DB.$METHOD($Q, ...)
+      - metavariable-regex:
+          metavariable: $METHOD
+          regex: ^(execute|executemany|executescript)$
